@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"net/http"
 	"strings"
@@ -16,8 +17,9 @@ import (
 var (
 	IloHealth               HealthType
 	HostsArray              HostsType
-	ListenAddr              = getEnv("LISTEN_ADDR", "0.0.0.0")
-	ListenPort              = getEnv("LISTEN_PORT", "10011")
+	ListenAddr              = flag.String("listen-addr", "0.0.0.0", "Define your listen address if needed")
+	ListenPort              = flag.String("listen-port", "9600", "Listen port")
+	HostsFile               = flag.String("hosts-file", "hosts.yaml", "full path to hosts file")
 	LastHostsModTime        time.Time
 	PromTemperaturesCurrent = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
@@ -235,7 +237,7 @@ func init() {
 	if PromErr := prometheus.Register(PromGatheringState); PromErr != nil {
 		panic(PromErr)
 	}
-
+	flag.Parse()
 }
 
 func main() {
@@ -266,7 +268,7 @@ func main() {
 	r := gin.Default()
 	p := ginprometheus.NewPrometheus("gin")
 	p.Use(r)
-	err := r.Run(ListenAddr + ":" + ListenPort)
+	err := r.Run(*ListenAddr + ":" + *ListenPort)
 
 	if err != nil {
 		panic(err)

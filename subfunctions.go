@@ -36,8 +36,8 @@ func checkFileMod(filename string) bool {
 
 func readHosts() {
 	for {
-		if checkFileMod("hosts.yaml") {
-			content, err := ioutil.ReadFile("hosts.yaml")
+		if checkFileMod(*HostsFile) {
+			content, err := ioutil.ReadFile(*HostsFile)
 			if err != nil {
 				panic(err)
 			}
@@ -121,12 +121,5 @@ func deletePrometheusMetrics(ilo string) {
 			PromInPost.Delete(labels)
 		}
 	}
-}
-
-func getEnv(key, fallback string) string {
-	if value, ok := os.LookupEnv(key); ok {
-		return value
-	}
-	return fallback
 }
 
