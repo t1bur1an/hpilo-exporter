@@ -1,0 +1,16 @@
+global:
+  login: root
+  password: toor
+hosts:
+  - address: 192.168.0.2
+    name: ilo1
+    password: root
+  - address: 192.168.0.3
+    name: ilo2
+    login: test
+    password: test
+  - address: 192.168.0.4
+    name: ilo3
+  - address: 192.168.0.5
+    name: ilo5
+    login: admin
